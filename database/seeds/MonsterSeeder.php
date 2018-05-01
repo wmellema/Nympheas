@@ -98,7 +98,7 @@ class MonsterSeeder extends Seeder
         echo "Using Cached JSON".PHP_EOL;
 
       }else{
-        $roll_20_db = 'https://roll20.net/compendium/compendium/getList?bookName=dnd5e&pageName=Monsters+List&_=1519991466141';
+        $roll_20_db = 'https://roll20.net/compendium/compendium/getList?bookName=dnd5e&pageName=Monsters+List&_=1524857996';
         $json = json_decode(file_get_contents($roll_20_db), true);
         $json['results'] = json_decode($json['results']);
         $json_length = count($json['results']);
@@ -106,6 +106,7 @@ class MonsterSeeder extends Seeder
           $this->progressBar($i,$json_length);
           $escaped_name = htmlspecialchars($monster->n);
           // Load compendium page for monster in Roll20, and extract relevant data
+          // echo $escaped_name.PHP_EOL;
           $dom = new Dom;
           $dom->load('https://roll20.net/compendium/dnd5e/'.$escaped_name);
           $traits = $dom->find('div#pagecontent');
@@ -128,48 +129,48 @@ class MonsterSeeder extends Seeder
 
         $data = $full_data['default_info'];
         echo $name.PHP_EOL;
-        $chal_split = explode("/",$data['Challenge Rating']);
-        $chal = (int) $data['Challenge Rating'];
+        $chal_split = explode("/",$data[6]);
+        $chal = (int) $data[6];
         if(count($chal_split) > 1){
           $chal = ((float) $chal_split[0]) / ((float) $chal_split[1]);
         }
-        $hp_split =  explode(" ",$data['HP']);
+        $hp_split =  explode(" ",$data[3]);
         $hp = $hp_split[0];
         if(count($hp_split) > 1){
           $hp = $hp_split[1];
         }
         $mObj = Monster::firstOrCreate(array(
           'name' => $name,
-          'size' => $data['Size'],
-          'type' => $data['Type'],
-          'alignment' => $data['Alignment'],
+          'size' => $data[0],
+          'type' => $data[1],
+          'alignment' => $data[2],
           'challenge_rating' => $chal,
-          'source' => $data['Source'],
-          'ac' => (int) $data['AC'],
+          // 'source' => $data['Source'],
+          'ac' => (int) explode(" ",$data[4])[0],
           'hp_dice' => $hp,
-          'speed' => $data['Speed'],
-          'str' => (int) $data['STR'],
-          'dex' => (int) $data['DEX'],
-          'con' => (int) $data['CON'],
-          'int' => (int) $data['INT'],
-          'wis' => (int) $data['WIS'],
-          'CHA' => (int) $data['CHA'],
-          'saving_throws' => $data['Saving Throws'],
-          'vulnerabilities' => $data['Vulnerabilities'],
-          'damage_vulnerabilities' => $data['Damage Vulnerabilities'],
-          'resistances' => $data['Resistances'],
-          'immunities' => $data['Immunities'],
-          'condition_immunities' => $data['Condition Immunities'],
-          'passive_perception' => (int) $data['Passive Perception'],
-          'senses' => $data['Senses'],
-          'languages' => $data['Languages'],
-          'spell-book' => $data['Spell Book'],
-          'roll-0' => $data['Roll 0'],
-          'roll-1' => $data['Roll 1'],
-          'roll-2' => $data['Roll 2'],
-          'roll-3' => $data['Roll 3'],
-          'roll-4' => $data['Roll 4'],
-          'legend-roll-0' => $data['Legendary Roll 0'],
+          'speed' => $data[5],
+          'str' => (int) $data[7],
+          'dex' => (int) $data[9],
+          'con' => (int) $data[11],
+          'int' => (int) $data[13],
+          'wis' => (int) $data[15],
+          'CHA' => (int) $data[17],
+          'saving_throws' => $data[19],
+          'vulnerabilities' => "None",
+          // 'damage_vulnerabilities' => $data['Damage Vulnerabilities'],
+          // 'resistances' => $data['Resistances'],
+          // 'immunities' => $data['Immunities'],
+          // 'condition_immunities' => $data['Condition Immunities'],
+          // 'passive_perception' => (int) $data['Passive Perception'],
+          'senses' => $data[28],
+          'languages' => $data[29],
+          'spell-book' => $data[30],
+          'roll-0' => $data[32],
+          'roll-1' => $data[33],
+          'roll-2' => $data[34],
+          'roll-3' => $data[35],
+          'roll-4' => $data[36],
+          'legend-roll-0' => $data[37],
           'img_url' => $full_data['img_url'],
 
 

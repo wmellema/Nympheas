@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="monster_card">
     <div class="background"></div>
 
     <div class="header">
@@ -96,4 +96,3 @@ export default {
   props: ['monster'],
 }
 </script>
-<link rel="stylesheet" href="/css/monsters/monster.css">

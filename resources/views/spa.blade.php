@@ -125,6 +125,12 @@ box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0
 }
 }
     </style>
+    <link rel="stylesheet" href="/css/app.css">
+    <link rel="stylesheet" href="/css/monsters/monster.css">
+
+    <script type="text/javascript" src="/js/bootstrap.js">
+
+    </script>
     <title>Vue SPA Demo</title>
 </head>
 <body>

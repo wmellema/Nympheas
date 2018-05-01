@@ -10,11 +10,25 @@
         </div>
 
         <ul v-if="monsters">
-            <li v-for="monster in monsters">
-                <img :src="monster.img_url" height="30px"></img>
-                <strong>Name:</strong> {{ monster.name }}
-                <monster-lg v-bind:monster="monster"></monster-lg>
-            </li>
+
+
+        <div class="panel-group" id="accordion">
+
+
+            <div class="panel panel-default" v-for="monster in monsters">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" :href="'#monster'+monster.id">{{ monster.name }}</a>
+                </h4>
+              </div>
+              <div :id="'monster'+monster.id" class="panel-collapse collapse in">
+                <monster-lg  v-bind:monster="monster"></monster-lg>
+
+            </div>
+          </div>
+
+
+        </div>
         </ul>
     </div>
   </template>

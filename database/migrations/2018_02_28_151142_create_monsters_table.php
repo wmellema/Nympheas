@@ -20,7 +20,7 @@ class CreateMonstersTable extends Migration
             $table->string('type');
             $table->string('alignment');
             $table->float('challenge_rating');
-            $table->string('source');
+            $table->string('source')->nullable();
 
             //Stats
             $table->integer('ac');
@@ -32,22 +32,22 @@ class CreateMonstersTable extends Migration
             $table->integer('int');
             $table->integer('wis');
             $table->integer('cha');
-            $table->string('saving_throws');
-            $table->string("vulnerabilities");
-            $table->string("damage_vulnerabilities");
-            $table->string('resistances');
-            $table->string("immunities");
-            $table->string("condition_immunities");
-            $table->integer("passive_perception");
-            $table->string('senses');
-            $table->string('languages');
-            $table->text("spell-book");
-            $table->string('roll-0');
-            $table->string('roll-1');
-            $table->string('roll-2');
-            $table->string('roll-3');
-            $table->string('roll-4');
-            $table->string('legend-roll-0');
+            $table->string('saving_throws')->nullable();
+            $table->string("vulnerabilities")->nullable();
+            $table->string("damage_vulnerabilities")->nullable();
+            $table->string('resistances')->nullable();
+            $table->string("immunities")->nullable();
+            $table->string("condition_immunities")->nullable();
+            $table->integer("passive_perception")->nullable();
+            $table->string('senses')->nullable();
+            $table->string('languages')->nullable();
+            $table->text("spell-book")->nullable();
+            $table->string('roll-0')->nullable();
+            $table->string('roll-1')->nullable();
+            $table->string('roll-2')->nullable();
+            $table->string('roll-3')->nullable();
+            $table->string('roll-4')->nullable();
+            $table->string('legend-roll-0')->nullable();
             $table->string('img_url');
             $table->timestamps();
         });

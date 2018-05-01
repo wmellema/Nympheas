@@ -1,1 +1,162 @@
-body{font-family:Cormorant Garamond,serif;font-size:15px}h1,h2,h3,h4,h5,h6{margin:0}.card{width:1000px;border:1px solid #000;overflow:hidden}.header{height:3em;border-bottom:1px solid #000}.bar-elements{background:#000;padding:0 10px;margin:0;color:#fff;height:3em;bottom:0}.bar-elements h1{margin:0}.name-bar{-webkit-transform:skewX(20deg);transform:skewX(20deg);position:relative;left:-20px;padding-left:30px;padding-right:150px;float:left}.challenge-bar,.name-bar h1{-webkit-transform:skewX(-20deg);transform:skewX(-20deg)}.challenge-bar{float:right;padding-right:30px;position:relative;right:-20px}.challenge-bar h1{-webkit-transform:skewX(20deg);transform:skewX(20deg)}.information{width:50%;margin-left:20px;height:24px}.information h5{display:inline-block;width:32%;margin:0}.left-align{margin:15px 0;text-align:left;margin-left:20px}.left-align,.right-align{width:40%;display:inline-block}.right-align{float:right;margin:15px 0;text-align:right;margin-right:20px}.stats{height:50px}.stats h1{width:60px;display:inline-block}.stats>.identifier:first-child{margin-left:20%}.stat{color:darkred;font-size:2.5em}.stat:last-of-type{width:15px}.stats>.ident-small{width:15%}.stats>.ident-small:first-child{margin-left:4%}.stats .ident-small{display:inline-block}.seperator{position:relative;left:-20px;margin:25px 0;height:1px;border:0;background:#000;background:-webkit-gradient(linear,0 0,100% 0,from(darkred),to(hsla(0,0%,100%,0)));width:100%}.right-align .seperator{background:-webkit-gradient(linear,0 0,100% 0,from(hsla(0,0%,100%,0)),to(darkred));left:20px}.monster-info td{vertical-align:top}
+.monster_card {
+  width: 500px;
+  border: 1px solid black;
+  overflow: hidden;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 7.500075px;
+}
+
+.monster_card h1 {
+  font-size: 2em;
+}
+
+.monster_card h2 {
+  font-size: 1.5em;
+}
+
+.monster_card h3 {
+  font-size: 1.17em;
+}
+
+.monster_card h4 {
+  font-size: 1em;
+}
+
+.monster_card h5 {
+  font-size: .83em;
+}
+
+.monster_card h6 {
+  font-size: .67em;
+}
+
+.header {
+  height: 3em;
+  border-bottom: 1px solid black;
+}
+
+.bar-elements {
+  background: black;
+  padding: 0px 5px;
+  margin: 0;
+  color: white;
+  height: 3em;
+  bottom: 0;
+}
+
+.bar-elements h1 {
+  margin: 0;
+}
+
+.name-bar {
+  -webkit-transform: skewX(20deg);
+          transform: skewX(20deg);
+  position: relative;
+  left: -10px;
+  padding-left: 15px;
+  padding-right: 75px;
+  float: left;
+}
+
+.name-bar h1 {
+  -webkit-transform: skewX(-20deg);
+          transform: skewX(-20deg);
+}
+
+.challenge-bar {
+  -webkit-transform: skewX(-20deg);
+          transform: skewX(-20deg);
+  float: right;
+  padding-right: 15px;
+  position: relative;
+  right: -10px;
+}
+
+.challenge-bar h1 {
+  -webkit-transform: skewX(20deg);
+          transform: skewX(20deg);
+}
+
+.information {
+  width: 50%;
+  margin-left: 10px;
+  height: 12.0000192px;
+}
+
+.information h5 {
+  display: inline-block;
+  width: 32%;
+  margin: 0;
+}
+
+.left-align {
+  width: 40%;
+  margin: 7.5px 0;
+  text-align: left;
+  margin-left: 10px;
+  display: inline-block;
+}
+
+.right-align {
+  float: right;
+  width: 40%;
+  margin: 7.5px 0;
+  text-align: right;
+  margin-right: 7.5px;
+  display: inline-block;
+}
+
+.stats {
+  height: 25px;
+}
+
+.stats h1 {
+  width: 30.00000012px;
+  display: inline-block;
+}
+
+.stats > .identifier:first-child {
+  margin-left: 20%;
+}
+
+.stat {
+  color: darkred;
+  font-size: 2.5em;
+}
+
+.stat:last-of-type {
+  width: 15px;
+}
+
+.stats > .ident-small {
+  width: 15%;
+}
+
+.stats > .ident-small:first-child {
+  margin-left: 4%;
+}
+
+.stats .ident-small {
+  display: inline-block;
+}
+
+.seperator {
+  position: relative;
+  left: -10px;
+  margin: 12.5px 0;
+  height: 1px;
+  border: 0;
+  background: black;
+  background: -webkit-gradient(linear, 0 0, 100% 0, from(darkred), to(rgba(255, 255, 255, 0)));
+  width: 100%;
+}
+
+.right-align .seperator {
+  background: -webkit-gradient(linear, 0 0, 100% 0, from(rgba(255, 255, 255, 0)), to(darkred));
+  left: 10px;
+}
+
+.monster-info td {
+  vertical-align: top;
+}
+

@@ -3,11 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Scout\Searchable;
+// use Laravel\Scout\Searchable;
 
 class Monster extends Model
 {
-    use Searchable;
+    // use Searchable;
     //
     public function traits(){
       return $this->belongsToMany('App\MonsterTrait');
