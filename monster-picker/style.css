@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+  background-color: #331f0e;
+}
+
+#collection, #selection {
+  float: left;
+  width: 400px;
+  height: 600px;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+}
+
+#collection {
+  clear: both;
+  background-color: #e5b94b;
+}
+
+#selection {
+  background-color: #111110;
+}
+
+#viewer, #details, #search {
+  float: left;
+  width: 400px;
+  border: 1px solid black;
+  margin: 5px;
+  padding: 5px;
+  overflow-y: scroll;
+}
+
+#viewer {
+  background-color: #e5b94b;
+  height: 250px;
+}
+
+#details {
+  background-color: #111110;
+  color: #ddb;
+  height: 250px;
+}
+
+#search {
+  height: 30px;
+  clear: both;
+}
+
+#save {
+  height: 30px;
+  width: 400px;
+  margin: 5px;
+  padding: 5px;
+}
+
+#details input {
+  width: 300px;
+  margin: 5px;
+  padding: 5px;
+}
+
+.monster-card {
+  background-color: #ddd2b5;
+  border-radius: 2px;
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.monster-card.selected {
+  background-color: #89C;
+}
+
+.hidden {
+  display: none;
+}
