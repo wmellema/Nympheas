@@ -138,8 +138,7 @@ class MonsterSeeder extends Seeder
           // echo $escaped_name.PHP_EOL;
           $dom = new Dom;
           $dom->load('https://roll20.net/compendium/dnd5e/Monsters:'.$tmp_escaped_name);
-          $traits = $dom->find('div#pagecontent');
-          // TODO:  Fix for non-existing pagecontent id. Sometimes skips monster randomly          
+          $traits = $dom->find('div#pagecontent');          
           foreach($traits as $pos =>$trait){
             $monster_data[$escaped_name] = $this->seperate_html_blocks($trait->innerHtml());
             $monster_data[$escaped_name] = array_merge($monster_data[$escaped_name],$this->parse_default_info($monster->c));
