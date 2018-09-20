@@ -91,6 +91,34 @@ class MonsterSeeder extends Seeder
       }
       return $img;
     }
+    public function parse_default_info($info){
+      return array(
+        'Size' => $info[0],
+        'Type' => $info[1],
+        'Alignment' => $info[2],
+        'Challenge Rating' => $info[6],
+        'XP' => $info[7],
+        'AC' => $info[4],
+        'HP' => $info[3],
+        'Speed' => $info[5],
+        'Str' => $info[8],
+        'Dex' => $info[10],
+        'Con' => $info[12],
+        'Int' => $info[14],
+        'Wis' => $info[16],
+        'Cha' => $info[18],
+        'Saving Throws' => $info[19],
+        'Senses' => $info[21],
+        'Languages' => explode(",",$info[29]),
+        'Spell Book' => json_decode($info[30]),
+        'Roll 0' => $info[32],
+        'Roll 1' => $info[33],
+        'Roll 2' => $info[34],
+        'Roll 3' => $info[35],
+        'Roll 4' => $info[36],
+        'Legendary Roll 0' => $info[37],
+        );
+    }
     public function run()
     {
       $monster_data = array();
@@ -105,16 +133,22 @@ class MonsterSeeder extends Seeder
         foreach( $json['results'] as $i => $monster){
           $this->progressBar($i,$json_length);
           $escaped_name = htmlspecialchars($monster->n);
+          $tmp_escaped_name = str_replace(" ","_",$escaped_name);
           // Load compendium page for monster in Roll20, and extract relevant data
           // echo $escaped_name.PHP_EOL;
           $dom = new Dom;
-          $dom->load('https://roll20.net/compendium/dnd5e/'.$escaped_name);
+          $dom->load('https://roll20.net/compendium/dnd5e/Monsters:'.$tmp_escaped_name);
           $traits = $dom->find('div#pagecontent');
-          // Fix for non-existing pagecontent id
+          // TODO:  Fix for non-existing pagecontent id. Sometimes skips monster randomly          
           foreach($traits as $pos =>$trait){
             $monster_data[$escaped_name] = $this->seperate_html_blocks($trait->innerHtml());
-            $monster_data[$escaped_name]['default_info'] = $monster->c;
+            $monster_data[$escaped_name] = array_merge($monster_data[$escaped_name],$this->parse_default_info($monster->c));
             $monster_data[$escaped_name]['img_url'] = $this->get_monster_img_url($escaped_name);
+          }
+          if(!array_key_exists($escaped_name, $monster_data)){
+            echo "Missed monster |".$escaped_name."|".PHP_EOL; 
+            $monster_data[$escaped_name] = $this->parse_default_info($monster->c);
+
           }
         }
         $fp = fopen('results.json', 'w');
@@ -127,51 +161,51 @@ class MonsterSeeder extends Seeder
 
       foreach($monster_data as $name => $full_data){
 
-        $data = $full_data['default_info'];
+        $data = $full_data;
         echo $name.PHP_EOL;
-        $chal_split = explode("/",$data[6]);
-        $chal = (int) $data[6];
+        $chal_split = explode("/",$data['Challenge Rating']);
+        $chal = (int) $data['Challenge Rating'];
         if(count($chal_split) > 1){
           $chal = ((float) $chal_split[0]) / ((float) $chal_split[1]);
         }
-        $hp_split =  explode(" ",$data[3]);
+        $hp_split =  explode(" ",$data['HP']);
         $hp = $hp_split[0];
         if(count($hp_split) > 1){
           $hp = $hp_split[1];
         }
         $mObj = Monster::firstOrCreate(array(
           'name' => $name,
-          'size' => $data[0],
-          'type' => $data[1],
-          'alignment' => $data[2],
+          'size' => $data['Size'],
+          'type' => $data['Type'],
+          'alignment' => $data['Alignment'],
           'challenge_rating' => $chal,
           // 'source' => $data['Source'],
-          'ac' => (int) explode(" ",$data[4])[0],
+          'ac' => (int) explode(" ",$data['AC'])[0],
           'hp_dice' => $hp,
-          'speed' => $data[5],
-          'str' => (int) $data[7],
-          'dex' => (int) $data[9],
-          'con' => (int) $data[11],
-          'int' => (int) $data[13],
-          'wis' => (int) $data[15],
-          'CHA' => (int) $data[17],
-          'saving_throws' => $data[19],
+          'speed' => $data['Speed'],
+          'str' => (int) $data['Str'],
+          'dex' => (int) $data['Dex'],
+          'con' => (int) $data['Con'],
+          'int' => (int) $data['Int'],
+          'wis' => (int) $data['Wis'],
+          'CHA' => (int) $data['Cha'],
+          'saving_throws' => $data['Saving Throws'],
           'vulnerabilities' => "None",
           // 'damage_vulnerabilities' => $data['Damage Vulnerabilities'],
           // 'resistances' => $data['Resistances'],
           // 'immunities' => $data['Immunities'],
           // 'condition_immunities' => $data['Condition Immunities'],
           // 'passive_perception' => (int) $data['Passive Perception'],
-          'senses' => $data[28],
-          'languages' => $data[29],
-          'spell-book' => $data[30],
-          'roll-0' => $data[32],
-          'roll-1' => $data[33],
-          'roll-2' => $data[34],
-          'roll-3' => $data[35],
-          'roll-4' => $data[36],
-          'legend-roll-0' => $data[37],
-          'img_url' => $full_data['img_url'],
+          'senses' => $data['Senses'],
+          'languages' => $data['Languages'],
+          'spell-book' => $data['Spell Book'],
+          'roll-0' => $data['Roll 0'],
+          'roll-1' => $data['Roll 1'],
+          'roll-2' => $data['Roll 2'],
+          'roll-3' => $data['Roll 3'],
+          'roll-4' => $data['Roll 4'],
+          'legend-roll-0' => $data['Legendary Roll 0'],
+          'img_url' => $data['img_url'],
 
 
 
