@@ -2,8 +2,30 @@
 
 use Illuminate\Database\Seeder;
 use PHPHtmlParser\Dom;
+use PHPHtmlParser\CurlInterface;
 use App\MonsterTrait;
+use PHPHtmlParser\Exceptions\CurlException;
+
 use App\Monster;
+
+class WindowsCurlInterface implements CurlInterface{
+  public function get($url){
+    $ch = curl_init($url);
+        if ( ! ini_get('open_basedir')) {
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        }
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        $content = curl_exec($ch);
+        if ($content === false) {
+            // there was a problem
+            $error = curl_error($ch);
+            throw new CurlException('Error retrieving "'.$url.'" ('.$error.')');
+        }
+        return $content;
+  }
+}
 class MonsterSeeder extends Seeder
 {
 
@@ -80,7 +102,7 @@ class MonsterSeeder extends Seeder
       // Ask for the page, and extract the img src
       $dom = new Dom;
       try {
-        $dom->load('https://www.dndbeyond.com/monsters/'.$escaped_name);
+        $dom->loadFromUrl('https://www.dndbeyond.com/monsters/'.$escaped_name,[],new WindowsCurlInterface);
         $img = $dom->find(".monster-image")->getAttribute('src');
       }catch (Exception $e){
         $img = "https://media-waterdeep.cursecdn.com/attachments/2/648/beast.jpg";
@@ -138,8 +160,8 @@ class MonsterSeeder extends Seeder
           $tmp_escaped_name = str_replace(" ","_",$escaped_name);
           // Load compendium page for monster in Roll20, and extract relevant data
           $dom = new Dom;
-          $dom->load('https://roll20.net/compendium/dnd5e/Monsters:'.$tmp_escaped_name);
-          $traits = $dom->find('div#pagecontent');          
+          $dom->loadFromUrl('https://roll20.net/compendium/dnd5e/Monsters:'.$tmp_escaped_name,[],new WindowsCurlInterface);
+          $traits = $dom->find('div#pagecontent');
           foreach($traits as $pos =>$trait){
             $monster_data[$escaped_name] = $this->seperate_html_blocks($trait->innerHtml());
             $monster_data[$escaped_name] = array_merge($monster_data[$escaped_name],$this->parse_default_info($monster->c));
@@ -147,7 +169,7 @@ class MonsterSeeder extends Seeder
           }
           // Failsafe for when the stupid page won't parse due to weird url encoding magic
           if(!array_key_exists($escaped_name, $monster_data)){
-            echo "Missed monster |".$escaped_name."|".PHP_EOL; 
+            echo "Missed monster |".$escaped_name."|".PHP_EOL;
             $monster_data[$escaped_name] = $this->parse_default_info($monster->c);
 
           }

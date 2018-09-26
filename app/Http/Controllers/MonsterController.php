@@ -18,7 +18,6 @@ class MonsterController extends Controller
       // return $json;
         // return Monster::get();
     }
-
     /**
      * Show the form for creating a new resource.
      *
