@@ -1,9 +1,9 @@
 .monster_card {
-  width: 500px;
+  width: 1000px;
   border: 1px solid black;
   overflow: hidden;
   font-family: 'Cormorant Garamond', serif;
-  font-size: 7.500075px;
+  font-size: 15.00015px;
 }
 
 .monster_card h1 {
@@ -30,6 +30,10 @@
   font-size: .67em;
 }
 
+.monster_card li {
+  list-style: none;
+}
+
 .header {
   height: 3em;
   border-bottom: 1px solid black;
@@ -37,7 +41,7 @@
 
 .bar-elements {
   background: black;
-  padding: 0px 5px;
+  padding: 0px 10px;
   margin: 0;
   color: white;
   height: 3em;
@@ -52,9 +56,9 @@
   -webkit-transform: skewX(20deg);
           transform: skewX(20deg);
   position: relative;
-  left: -10px;
-  padding-left: 15px;
-  padding-right: 75px;
+  left: -20px;
+  padding-left: 30px;
+  padding-right: 150px;
   float: left;
 }
 
@@ -67,9 +71,9 @@
   -webkit-transform: skewX(-20deg);
           transform: skewX(-20deg);
   float: right;
-  padding-right: 15px;
+  padding-right: 30px;
   position: relative;
-  right: -10px;
+  right: -20px;
 }
 
 .challenge-bar h1 {
@@ -79,8 +83,8 @@
 
 .information {
   width: 50%;
-  margin-left: 10px;
-  height: 12.0000192px;
+  margin-left: 20px;
+  height: 24.0000384px;
 }
 
 .information h5 {
@@ -91,41 +95,41 @@
 
 .left-align {
   width: 40%;
-  margin: 7.5px 0;
+  margin: 15px 0;
   text-align: left;
-  margin-left: 10px;
+  margin-left: 20px;
   display: inline-block;
 }
 
 .right-align {
   float: right;
   width: 40%;
-  margin: 7.5px 0;
+  margin: 15px 0;
   text-align: right;
-  margin-right: 7.5px;
+  margin-right: 15px;
   display: inline-block;
 }
 
+.right-align .seperator {
+  background: -webkit-gradient(linear, 0 0, 100% 0, from(rgba(255, 255, 255, 0)), to(darkred));
+  left: 20px;
+}
+
+.right-align li {
+  text-align: left !important;
+}
+
 .stats {
-  height: 25px;
+  height: 50px;
 }
 
 .stats h1 {
-  width: 30.00000012px;
+  width: 60.00000024px;
   display: inline-block;
 }
 
 .stats > .identifier:first-child {
   margin-left: 20%;
-}
-
-.stat {
-  color: darkred;
-  font-size: 2.5em;
-}
-
-.stat:last-of-type {
-  width: 15px;
 }
 
 .stats > .ident-small {
@@ -140,20 +144,24 @@
   display: inline-block;
 }
 
+.stat {
+  color: darkred;
+  font-size: 2.5em;
+}
+
+.stat :last-of-type {
+  width: 30px;
+}
+
 .seperator {
   position: relative;
-  left: -10px;
-  margin: 12.5px 0;
+  left: -20px;
+  margin: 25px 0;
   height: 1px;
   border: 0;
   background: black;
   background: -webkit-gradient(linear, 0 0, 100% 0, from(darkred), to(rgba(255, 255, 255, 0)));
   width: 100%;
-}
-
-.right-align .seperator {
-  background: -webkit-gradient(linear, 0 0, 100% 0, from(rgba(255, 255, 255, 0)), to(darkred));
-  left: 10px;
 }
 
 .monster-info td {

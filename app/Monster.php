@@ -12,12 +12,18 @@ class Monster extends Model
     public function traits(){
       return $this->belongsToMany('App\MonsterTrait');
     }
+    public function actions(){
+      return $this->belongsToMany('App\MonsterAction');
+    }
 
     public function toArray() {
       $data = parent::toArray();
 
       if($this->traits){
         $data['traits'] = $this->traits;
+      }
+      if($this->actions){
+        $data['actions'] = $this->actions;
       }
       return $data;
     }

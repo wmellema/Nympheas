@@ -4,6 +4,7 @@ use Illuminate\Database\Seeder;
 use PHPHtmlParser\Dom;
 use PHPHtmlParser\CurlInterface;
 use App\MonsterTrait;
+use App\MonsterAction;
 use PHPHtmlParser\Exceptions\CurlException;
 
 use App\Monster;
@@ -55,7 +56,7 @@ class MonsterSeeder extends Seeder
 
         //Remove html tags from body and title, then add to the elements array
         $title = strip_tags($title[1]);
-        $elements[$title] = strip_tags($body);
+        $elements[$title] = substr(strip_tags($body),1);
       }
       return $elements;
     }
@@ -220,7 +221,7 @@ class MonsterSeeder extends Seeder
           // 'condition_immunities' => $data['Condition Immunities'],
           // 'passive_perception' => (int) $data['Passive Perception'],
           'senses' => $data['Senses'],
-          'languages' => $data['Languages'],
+          'languages' => json_encode($data['Languages']),
           'spell-book' => json_encode($data['Spell Book']),
           'roll-0' => $data['Roll 0'],
           'roll-1' => $data['Roll 1'],
@@ -238,6 +239,12 @@ class MonsterSeeder extends Seeder
           foreach($full_data["Traits"] as $trait => $body){
             $tObj = MonsterTrait::firstOrCreate(array('title' => $trait, 'body' => $body));
             $mObj->traits()->save($tObj);
+          }
+        }
+        if(array_key_exists("Actions",$full_data)){
+          foreach($full_data["Actions"] as $trait => $body){
+            $tObj = MonsterAction::firstOrCreate(array('title' => $trait, 'body' => $body));
+            $mObj->actions()->save($tObj);
           }
         }
       }

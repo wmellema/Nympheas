@@ -47,7 +47,7 @@ class CreateMonstersTable extends Migration
             $table->string('roll-2')->nullable();
             $table->string('roll-3')->nullable();
             $table->string('roll-4')->nullable();
-            $table->string('legend-roll-0')->nullable();
+            $table->text('legend-roll-0')->nullable();
             $table->string('img_url');
             $table->timestamps();
         });

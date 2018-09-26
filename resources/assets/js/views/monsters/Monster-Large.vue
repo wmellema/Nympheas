@@ -85,8 +85,10 @@
 
       <h1>Actions:</h1>
       <hr class="seperator" />
-      <strong>Hello</strong><br />
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras et nibh ac felis accumsan aliquet. Nam et tincidunt turpis. Morbi purus turpis, commodo eget arcu a, tincidunt rhoncus elit. Vestibulum eget turpis lacus. Praesent at tellus dolor. Aliquam suscipit id nisl nec semper. Phasellus pellentesque nibh orci, cursus interdum elit porttitor a. Duis quis felis vehicula, rutrum leo a, ultrices sem. Suspendisse eu neque tristique, vestibulum ipsum id, lobortis turpis. Aliquam aliquam mi nisi, vitae lacinia augue viverra ac. Vivamus molestie commodo felis, nec vehicula nulla hendrerit porttitor. Vestibulum rutrum porttitor elit, vitae dapibus felis vulputate quis. Aenean id nisl sed risus porttitor ultrices nec quis nisl. Donec vel tellus diam.
+      <li v-for="action in monster.actions">
+      <strong>{{action.title}}</strong>: {{action.body}}<br />
+      </li>
+      
     </div>
   </div>
 </template>
