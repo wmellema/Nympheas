@@ -91,7 +91,7 @@ class MonsterSeeder extends Seeder
       }
       return $img;
     }
-    public function parse_default_info($info){
+    private function parse_default_info($info){
       return array(
         'Size' => $info[0],
         'Type' => $info[1],
@@ -133,9 +133,10 @@ class MonsterSeeder extends Seeder
         foreach( $json['results'] as $i => $monster){
           $this->progressBar($i,$json_length);
           $escaped_name = htmlspecialchars($monster->n);
+          // Somehow the dom finder won't accept spaces in the url for some monsters. 
+          // Changed the spaces to underscores and TADA! It works!
           $tmp_escaped_name = str_replace(" ","_",$escaped_name);
           // Load compendium page for monster in Roll20, and extract relevant data
-          // echo $escaped_name.PHP_EOL;
           $dom = new Dom;
           $dom->load('https://roll20.net/compendium/dnd5e/Monsters:'.$tmp_escaped_name);
           $traits = $dom->find('div#pagecontent');          
@@ -144,6 +145,7 @@ class MonsterSeeder extends Seeder
             $monster_data[$escaped_name] = array_merge($monster_data[$escaped_name],$this->parse_default_info($monster->c));
             $monster_data[$escaped_name]['img_url'] = $this->get_monster_img_url($escaped_name);
           }
+          // Failsafe for when the stupid page won't parse due to weird url encoding magic
           if(!array_key_exists($escaped_name, $monster_data)){
             echo "Missed monster |".$escaped_name."|".PHP_EOL; 
             $monster_data[$escaped_name] = $this->parse_default_info($monster->c);
@@ -197,7 +199,7 @@ class MonsterSeeder extends Seeder
           // 'passive_perception' => (int) $data['Passive Perception'],
           'senses' => $data['Senses'],
           'languages' => $data['Languages'],
-          'spell-book' => $data['Spell Book'],
+          'spell-book' => json_encode($data['Spell Book']),
           'roll-0' => $data['Roll 0'],
           'roll-1' => $data['Roll 1'],
           'roll-2' => $data['Roll 2'],
