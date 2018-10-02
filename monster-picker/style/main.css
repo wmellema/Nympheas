@@ -7,8 +7,16 @@ body {
   background-color: #331f0e;
 }
 
-#collection, #selection {
-  float: left;
+#root {
+  width: 420px;
+}
+
+.row {
+  display: flex;
+  width: 800px;
+}
+
+#collection, #encounter {
   width: 400px;
   height: 600px;
   border: 1px solid black;
@@ -20,16 +28,14 @@ body {
 }
 
 #collection {
-  clear: both;
   background-color: #e5b94b;
 }
 
-#selection {
+#encounter {
   background-color: #111110;
 }
 
 #viewer, #details, #search {
-  float: left;
   width: 400px;
   border: 1px solid black;
   margin: 5px;
@@ -38,7 +44,7 @@ body {
 }
 
 #viewer {
-  background-color: #e5b94b;
+  background-color: rgb(254, 254, 254);
   height: 250px;
 }
 
@@ -50,7 +56,6 @@ body {
 
 #search {
   height: 30px;
-  clear: both;
 }
 
 #save {
@@ -66,17 +71,12 @@ body {
   padding: 5px;
 }
 
-.monster-card {
-  background-color: #ddd2b5;
-  border-radius: 2px;
-  margin: 5px;
-  padding: 5px;
-  border: 1px solid black;
-  cursor: pointer;
+#details .stats {
+  font-family: 'Merriweather', serif;
 }
 
-.monster-card.selected {
-  background-color: #89C;
+.italic {
+  font-style: italic;
 }
 
 .hidden {

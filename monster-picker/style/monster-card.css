@@ -1,0 +1,100 @@
+.monster-card {
+  position: relative;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: bold;
+  background-color: rgb(254, 254, 254);
+  border-radius: 2px;
+  height: 60px;
+  margin: 5px;
+  padding: 5px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  transition: height 0.5s;
+  overflow: hidden;
+}
+
+
+.monster-card.draggable {
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+#encounter .monster-card .stats {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.monster-card.selected {
+  background-image: linear-gradient(to right, #89C, rgb(254, 254, 254));
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  height: 100px;
+}
+
+#encounter .monster-card.selected .stats {
+  opacity: 1;
+}
+
+.monster-card img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+#encounter .monster-card.selected img {
+  opacity: 0.5;
+}
+
+.monster-card .name {
+  color: darkred;
+  font-size: 1.3em;
+  font-variant: small-caps;
+}
+
+.monster-card .name, .monster-card .desc, .monster-card .stats {
+  position: relative;
+  z-index: 1;
+}
+
+.monster-card .info, .monster-card .stats {
+  color: darkred;
+}
+
+.monster-card .stats th {
+  font-family: 'Merriweather', serif;
+  font-size: 0.8em;
+  width: 55px;
+}
+
+.monster-card .stats td {
+  text-align: center;
+}
+
+.monster-card .separator {
+  margin: 5px 0;
+  height: 2px;
+  border: 0;
+  background-image: linear-gradient(to right, darkred, rgb(254, 254, 254));
+  width: 100%;
+}
+
+.monster-card .caption {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: 1.15em;
+  color: darkred;
+  font-variant: small-caps;
+  border-bottom: 1px solid black;
+}
+
+.monster-card .description {
+  margin-top: 8px;
+}
+
+.monster-card .bold {
+  font-family: 'Merriweather', serif;
+  font-size: 0.8em;
+  font-weight: bold;
+}
