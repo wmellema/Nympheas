@@ -170,21 +170,32 @@ const controller = {
   },
   serializeEncounter () {
     const array = []
-    for (const monster of this.encounter) {
-      array.push({
-        id: monster.id,
-        kind: monster.kind.name,
-        ac: monster.ac,
-        hp: monster.hp,
-        str: monster.str,
-        dex: monster.dex,
-        con: monster.con,
-        int: monster.int,
-        wis: monster.wis,
-        cha: monster.cha
-      })
+    for (const m of this.encounter) {
+      const monster = {id: m.id, kind: m.kind.name}
+      for (const stat of STAT_NAMES) monster[stat] = m[stat]
+      array.push(monster)
     }
     return JSON.stringify(array)
+  },
+  importEncounter (data) {
+    this.encounter.clear()
+    let monsters
+    try {
+      monsters = JSON.parse(data)
+    } catch (error) {
+      alert('Your JSON is invalid')
+      return
+    }
+    ui.encounter.innerHTML = ''
+    for (const m of JSON.parse(data)) {
+      let kind = (() => {
+        for (const k of this.collection) if (m.kind === k.name) return k
+      })()
+      const monster = new Monster(kind)
+      for (const stat of STAT_NAMES) monster[stat] = m[stat]
+      monster.renderCard()
+      this.encounter.add(monster)
+    }
   },
   renderViewer () {
     ui.viewer.innerHTML = ''
@@ -283,10 +294,12 @@ once(win, 'load', () => {
   ui.viewer = create(row1, 'div', {id: 'viewer', class: 'monster-card'})
   ui.details = create(row1, 'div', {id: 'details'})
   ui.search = create(row2, 'input', {id: 'search'})
+  ui.load = create(row2, 'button', {id: 'load'}, 'Load')
   ui.save = create(row2, 'button', {id: 'save'}, 'Save')
   ui.collection = create(row3, 'div', {id: 'collection'})
   ui.encounter = create(row3, 'div', {id: 'encounter'})
 
+  initModals()
   initDetails()
 
   importJson('monsters.json')
@@ -330,9 +343,46 @@ once(win, 'load', () => {
 
   on(ui.search, 'input', () => controller.searchCollection(ui.search.value))
 
-  on(ui.save, 'click', () => console.log(controller.serializeEncounter()))
+  on(ui.load, 'click', () => ui.modal.load.open())
+
+  on(ui.save, 'click', () => ui.modal.save.open(controller.serializeEncounter()))
 
 })
+
+function initModals () {
+  const load = create(ui.root, 'div', {class: 'modal hidden'})
+  load.box =  create(load, 'div', {class: 'box'})
+  load.input = create(load.box, 'textarea')
+  create(load.box, 'br')
+  load.ok = create(load.box, 'button', {}, 'OK')
+  load.cancel = create(load.box, 'button', {}, 'Cancel')
+  load.open = () => load.classList.remove('hidden')
+  load.close = () => {
+    load.classList.add('hidden')
+    load.input.value = ''
+  }
+  on(load.ok, 'click', () => {
+    controller.importEncounter(load.input.value)
+    load.close()
+  })
+  on(load.cancel, 'click', load.close)
+
+  const save = create(ui.root, 'div', {class: 'modal hidden'})
+  save.box = create(save, 'div', {class: 'box'})
+  save.output = create(save.box, 'div', {class: 'output'})
+  save.ok = create(save.box, 'button', {}, 'OK')
+  save.open = (str) => {
+    save.output.textContent = str
+    save.classList.remove('hidden')
+  }
+  save.close = () => {
+    save.output.textContent = ''
+    save.classList.add('hidden')
+  }
+  on(save.ok, 'click', save.close)
+
+  ui.modal = {load, save}
+}
 
 function initDetails () {
   ui.input = {

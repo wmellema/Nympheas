@@ -1,8 +1,8 @@
 const doc = document
 const win = window
 
-doc.get = doc.querySelector
-doc.getAll = doc.querySelectorAll
+const qs = doc.querySelector
+const qsa = doc.querySelectorAll
 
 function isNode (value) {
   return value instanceof Node

@@ -58,9 +58,9 @@ body {
   height: 30px;
 }
 
-#save {
+#save, #load {
   height: 30px;
-  width: 400px;
+  width: 200px;
   margin: 5px;
   padding: 5px;
 }
@@ -81,4 +81,36 @@ body {
 
 .hidden {
   display: none;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal .box {
+  height: 30%;
+  width: 50%;
+  margin: 15% auto;
+  background-color: white;
+  padding: 20px;
+}
+
+.modal textarea {
+  width: 90%;
+  height: 200px;
+  resize: none;
+}
+
+.modal .output {
+  border: 1px solid black;
+  width: 90%;
+  height: 200px;
+  overflow-y: scroll;
+  word-wrap: break-word;
 }
