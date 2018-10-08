@@ -1,0 +1,111 @@
+.monster-card {
+  position: relative;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: bold;
+  background-color: #fefefe;
+  border-radius: 2px;
+  height: 60px;
+  margin: 5px;
+  padding: 5px;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-transition: height 0.5s;
+  transition: height 0.5s;
+  overflow: hidden;
+  max-width: 400px;
+}
+
+.monster-card.draggable {
+  cursor: pointer;
+  -ms-flex-negative: 0;
+      flex-shrink: 0;
+}
+
+#encounter .monster-card .stats {
+  opacity: 0;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+.monster-card.selected {
+  background-image: -webkit-gradient(linear, left top, right top, from(#89C), to(#fefefe));
+  background-image: linear-gradient(to right, #89C, #fefefe);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  height: 100px;
+}
+
+#encounter .monster-card.selected .stats {
+  opacity: 1;
+}
+
+.monster-card img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s;
+}
+
+#encounter .monster-card.selected img {
+  opacity: 0.5;
+}
+
+.monster-card .name {
+  color: darkred;
+  font-size: 1.3em;
+  font-variant: small-caps;
+}
+
+.monster-card .name,
+.monster-card .desc,
+.monster-card .stats {
+  position: relative;
+  z-index: 1;
+}
+
+.monster-card .info,
+.monster-card .stats {
+  color: darkred;
+}
+
+.monster-card .stats th {
+  font-family: 'Merriweather', serif;
+  font-size: 0.8em;
+  width: 55px;
+}
+
+.monster-card .stats td {
+  text-align: center;
+}
+
+.monster-card .separator {
+  margin: 5px 0;
+  height: 2px;
+  border: 0;
+  background-image: -webkit-gradient(linear, left top, right top, from(darkred), to(#fefefe));
+  background-image: linear-gradient(to right, darkred, #fefefe);
+  width: 100%;
+}
+
+.monster-card .caption {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: 1.15em;
+  color: darkred;
+  font-variant: small-caps;
+  border-bottom: 1px solid black;
+}
+
+.monster-card .description {
+  margin-top: 8px;
+}
+
+.monster-card .bold {
+  font-family: 'Merriweather', serif;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+

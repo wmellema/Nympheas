@@ -10,7 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/{any}', 'SpaController@index')->where('any', '.*');
 Route::resource('monster','MonsterController', ["as" => "monsters"]);
 Route::get('/', function () {
     return view('welcome');

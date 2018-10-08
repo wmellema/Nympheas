@@ -2,5 +2,8 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/monsters/monster.css": "/css/monsters/monster.css",
+    "/css/monsters/monster-card-sm.css": "/css/monsters/monster-card-sm.css",
+    "/css/monsters/encounter-creator-main.css": "/css/monsters/encounter-creator-main.css",
+    "/js/encounter-creator.js": "/js/encounter-creator.js",
     "/js/bootstrap.js": "/js/bootstrap.js"
 }

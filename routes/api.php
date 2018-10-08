@@ -22,5 +22,7 @@ Route::get('/search',[
 ]);
 Route::get('/monsters', function (Request $request){
   return App\Monster::get();
-
+});
+Route::get('/monsters/{name}', function ($name){
+  return App\Monster::where('name',$name)->get();
 });

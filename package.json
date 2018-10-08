@@ -20,6 +20,7 @@
     "vue": "^2.5.7"
   },
   "dependencies": {
+    "crypto-js": "^3.1.9-1",
     "node-gyp": "^3.6.2",
     "vue-instantsearch": "^1.5.2",
     "vue-router": "^3.0.1"

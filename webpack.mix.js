@@ -13,6 +13,9 @@ let mix = require('laravel-mix');
 
 mix.js('resources/assets/js/app.js', 'public/js')
    .sass('resources/assets/sass/app.scss', 'public/css');
+mix.js('resources/assets/js/encounter-creator.js', 'public/js')
 mix.js('resources/assets/js/bootstrap.js', 'public/js')
   // .sass('resources/assets/sass/bootstrap.scss');
 mix.sass('resources/assets/sass/monsters/monster.scss','public/css/monsters');
+mix.sass('resources/assets/sass/monsters/monster-card-sm.scss','public/css/monsters');
+mix.sass('resources/assets/sass/monsters/encounter-creator-main.scss','public/css/monsters');
