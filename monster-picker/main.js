@@ -51,7 +51,7 @@ class Kind {
 }
 
 class Monster {
-  constructor (kind, card) {
+  constructor (kind) {
     this.id = md5(Date.now())
     this.kind = kind
     this.ac = kind.data.AC
@@ -68,12 +68,15 @@ class Monster {
       draggable: true
     })
     on(card, 'click', () => controller.selectMonster(this))
-    on(card, 'dragstart', () => controller.draggedMonster = this)
+    on(card, 'dragstart', (event) => {
+      controller.draggedMonster = this
+      event.dataTransfer.setDragImage(this.img, 10, 10)
+    })
     on(card, 'dragend', () => controller.draggedMonster = null)
     this.name = create(this.card, 'div', {class: 'name'})
     this.desc = create(this.card, 'div', {class: 'desc'})
     this.stats = create(this.card, 'table', {class: 'stats'})
-    create(card, 'img', {src: this.kind.data.img_url})
+    this.img = create(card, 'img', {src: this.kind.data.img_url})
     this.renderCard()
   }
   renderCard () {

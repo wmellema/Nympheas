@@ -16,6 +16,19 @@ body {
   width: 800px;
 }
 
+#map, #panel {
+  min-height: 200px;
+}
+
+#map {
+  background-color: darkgreen;
+  width: 70%;
+}
+
+#panel {
+  width: 30%;
+}
+
 #collection, #encounter {
   width: 400px;
   height: 600px;
@@ -31,7 +44,7 @@ body {
   background-color: #e5b94b;
 }
 
-#encounter {
+#encounter, #panel {
   background-color: #111110;
 }
 
