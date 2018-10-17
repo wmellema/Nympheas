@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react'
 import {Line, Group} from 'react-konva'
+import Konva from 'konva'
 
 import {Anchor} from './common'
 
@@ -16,7 +17,8 @@ export default class FlexPoly extends PureComponent {
     this.state = {
       x: props.x,
       y: props.y,
-      points: getRandomPoints(props.corners * 2, props.size)
+      points: getRandomPoints(props.corners * 2, props.size),
+      fill: props.fill || Konva.Util.getRandomColor()
     }
     this.reposition = this.reposition.bind(this)
     this.resize = this.resize.bind(this)
@@ -38,7 +40,7 @@ export default class FlexPoly extends PureComponent {
   }
 
   render () {
-    const {x, y, points} = this.state
+    const {x, y, points, fill} = this.state
 
     const anchors = []
     for (let i = 0; i < points.length; i += 2) {
@@ -53,10 +55,7 @@ export default class FlexPoly extends PureComponent {
 
     return (
       <Group draggable={true} onDragEnd={this.reposition} x={x} y={y}>
-        <Line
-          closed={true} points={points}
-          fill={this.props.fill} shadowBlur={5}
-        />
+        <Line closed={true} points={points} fill={fill} shadowBlur={5} />
         {anchors}
       </Group>
     )
