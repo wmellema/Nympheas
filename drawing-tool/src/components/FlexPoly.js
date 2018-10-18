@@ -4,27 +4,11 @@ import Konva from 'konva'
 
 import {Anchor} from './common'
 
-function getRandomPoints (n, size) {
-  const {random, floor} = Math
-  const arr = []
-  for (let i = 0; i < n * 2; i++) arr.push(floor(random() * size) + 1)
-  return arr
-}
-
-function getAverage (array, floor = true) {
-  let sum = 0
-  for (const i of array) sum += i
-  let avg = sum / array.length
-  return floor ? Math.floor(avg) : avg
-}
-
 const diff = (a, b) => a > b ? a - b : b - a
-const lth = (a) => a.sort((a, b) => a - b)
-const htl = (a) => a.sort((a, b) => b - a)
 
 const findClosestPoints = (points, x, y) => (
   Array(points.length / 2)
-    .fill(null)
+    .fill(0)
     .map((v, i) => i)
     .map((v) => v * 2)
     .sort((a, b) => {
@@ -50,15 +34,13 @@ class PersistentListener {
   }
 }
 
-
-
 export default class FlexPoly extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
       x: props.x,
       y: props.y,
-      points: getRandomPoints(props.corners, props.size),
+      points: props.points,
       fill: props.fill || Konva.Util.getRandomColor()
     }
     this.reposition = this.reposition.bind(this)
@@ -74,8 +56,8 @@ export default class FlexPoly extends PureComponent {
     const points = this.state.points.slice()
     const [a, b] = findClosestPoints(points, ...this.mousePosition)
     let i
-    if (diff(a, b) === 2) i = htl([a, b])[0]
-    else i = lth([a, b])[0]
+    if (diff(a, b) === 2) i = a > b ? a : b
+    else i = i = a < b ? a : b
     points.splice(i, 0, ...this.mousePosition)
     this.setState({points})
   }
@@ -121,6 +103,7 @@ export default class FlexPoly extends PureComponent {
         />
       )
     }
+    console.log(points)
 
     return (
       <Group draggable={true} x={x} y={y} onDragEnd={this.reposition}>
