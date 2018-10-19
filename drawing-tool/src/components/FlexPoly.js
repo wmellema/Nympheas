@@ -6,7 +6,7 @@ import {Anchor} from './common'
 
 const diff = (a, b) => a > b ? a - b : b - a
 
-const findClosestPoints = (points, x, y) => (
+const findClosestPoints = (points, x, y) =>
   Array(points.length / 2)
     .fill(0)
     .map((v, i) => i)
@@ -16,7 +16,6 @@ const findClosestPoints = (points, x, y) => (
       const db = diff(points[b], x) + diff(points[b + 1], y)
       return da - db
     })
-)
 
 class PersistentListener {
   constructor (eventName, callback, turnOn = false) {
@@ -57,7 +56,7 @@ export default class FlexPoly extends PureComponent {
     const [a, b] = findClosestPoints(points, ...this.mousePosition)
     let i
     if (diff(a, b) === 2) i = a > b ? a : b
-    else i = i = a < b ? a : b
+    else i = a < b ? a : b
     points.splice(i, 0, ...this.mousePosition)
     this.setState({points})
   }
@@ -94,24 +93,28 @@ export default class FlexPoly extends PureComponent {
   render () {
     const {x, y, points, fill} = this.state
     const anchors = []
-    for (let i = 0; i < points.length; i += 2) {
-      anchors.push(
-        <Anchor
-          x={points[i]} y={points[i + 1]}
-          key={i} name={`${i}`}
-          onDragMove={this.resize}
-        />
-      )
+
+    if (this.props.selected) {
+      for (let i = 0; i < points.length; i += 2) {
+        anchors.push(
+          <Anchor
+            x={points[i]} y={points[i + 1]}
+            key={i} name={`${i}`}
+            onDragMove={this.resize}
+          />
+        )
+      }
     }
-    console.log(points)
 
     return (
       <Group draggable={true} x={x} y={y} onDragEnd={this.reposition}>
         <Line
           closed={true} points={points} fill={fill} shadowBlur={5}
+          name={this.props.name}
           onMouseEnter={this.keyListener.on}
           onMouseLeave={this.keyListener.off}
           onMouseMove={this.trackMouse}
+          onMouseDown={this.props.onMouseDown}
         />
         {anchors}
       </Group>

@@ -18,63 +18,102 @@ export default class App extends Component {
     super(props)
     this.state = {
       shapes: [],
-      selectedId: null
+      selectedShape: null
     }
-    this.createFlexRect = this.createFlexRect.bind(this)
-    this.createFlexPoly = this.createFlexPoly.bind(this)
     this.selectShape = this.selectShape.bind(this)
+    this.deselectShape = this.deselectShape.bind(this)
+    this.keyListener = this.keyListener.bind(this)
   }
-  createFlexRect () {
-    const shapes = [...this.state.shapes]
-    const id = shapeId++
-    shapes.push(
-      <FlexRect
-        key={id} id={id}
-        {...DEFAULT_POS}
-        width={50} height={50}
-        heldKeys={heldKeys}
-        selected={false}
-        onClick={this.selectShape}
-      />
-    )
-    this.setState({shapes})
+  componentDidMount () {
+    window.addEventListener('keypress', this.keyListener)
   }
-  createFlexPoly () {
+  componentWillUnmount () {
+    window.removeEventListener('keypress', this.keyListener)
+  }
+  keyListener (event) {
+    switch (event.key) {
+      case 'Delete': return this.destroyShape()
+      default: // do nothing
+    }
+  }
+  createShape (type) {
     const shapes = [...this.state.shapes]
-    const id = shapeId++
-    shapes.push(
-      <FlexPoly
-        key={id} id={id}
-        {...DEFAULT_POS}
-        points={[...DEFAULT_POINTS]}
-        heldKeys={heldKeys}
-        selected={false}
-        onClick={this.selectShape}
-      />
-    )
+    shapes.push({
+      type,
+      id: `${shapeId++}`,
+      selected: false
+    })
     this.setState({shapes})
   }
   selectShape (event) {
-    const {shapes, selectedId} = this.state
-    const id = event.target.id
-    shapes.find(i => i.key === id).props.selected = true
-    shapes.find(i => i.key === id).props.selected = true
-
+    const {shapes, selectedShape} = this.state
+    if (selectedShape) selectedShape.selected = false
+    const shape = shapes.find(i => i.id === event.target.name())
+    shape.selected = true
+    this.setState({
+      selectedShape: shape,
+      shapes
+    })
+  }
+  deselectShape (event) {
+    if (event.target.nodeType !== 'Stage') return
+    const {shapes, selectedShape} = this.state
+    if (selectedShape) selectedShape.selected = false
+    this.setState({
+      selectedShape: null,
+      shapes
+    })
+  }
+  destroyShape () {
+    let {shapes, selectedShape} = this.state
+    if (!selectedShape) return
+    shapes = [...shapes]
+    shapes.splice(shapes.indexOf(selectedShape), 1)
+    selectedShape = null
+    this.setState({shapes, selectedShape})
   }
   render () {
-    console.log(this.state.shapes)
+    const shapes = this.state.shapes.map((v) => {
+      switch (v.type) {
+        case 'FlexRect': return (
+          <FlexRect
+            key={v.id} name={v.id}
+            {...DEFAULT_POS}
+            width={50} height={50}
+            heldKeys={heldKeys}
+            selected={v.selected}
+            onMouseDown={this.selectShape}
+          />
+        )
+        case 'FlexPoly': return (
+          <FlexPoly
+            key={v.id} name={v.id}
+            {...DEFAULT_POS}
+            points={[...DEFAULT_POINTS]}
+            heldKeys={heldKeys}
+            selected={v.selected}
+            onMouseDown={this.selectShape}
+          />
+        )
+        default: return null
+      }
+    })
     return (
-      <Stage width={window.innerWidth} height={window.innerHeight}>
+      <Stage
+        width={window.innerWidth} height={window.innerHeight}
+        onClick={this.deselectShape}
+      >
         <Layer>
           <Rect
             x={10} y={10} width={50} height={50} fill="#EEEEEE" shadowBlur={5}
-            onClick={this.createFlexRect}
+            onClick={() => this.createShape('FlexRect')}
           />
           <Line
-            x={70} y={10} points={[...DEFAULT_POINTS]} fill="#EEEEEE" closed={true} shadowBlur={5}
-            onClick={this.createFlexPoly}
+            x={70} y={10} points={[...DEFAULT_POINTS]} fill="#EEEEEE"
+            closed={true} shadowBlur={5}
+            onClick={() => this.createShape('FlexPoly')}
           />
-          {this.state.shapes}
+          {shapes}
         </Layer>
       </Stage>
     )
