@@ -17,22 +17,6 @@ const findClosestPoints = (points, x, y) =>
       return da - db
     })
 
-class PersistentListener {
-  constructor (eventName, callback, turnOn = false) {
-    this.eventName = eventName
-    this.callback = callback
-    this.on = this.on.bind(this)
-    this.off = this.off.bind(this)
-    if (turnOn) this.on()
-  }
-  on () {
-    window.addEventListener(this.eventName, this.callback)
-  }
-  off () {
-    window.removeEventListener(this.eventName, this.callback)
-  }
-}
-
 export default class FlexPoly extends PureComponent {
   constructor (props) {
     super(props)
@@ -44,27 +28,23 @@ export default class FlexPoly extends PureComponent {
     }
     this.reposition = this.reposition.bind(this)
     this.resize = this.resize.bind(this)
-    this.trackMouse = this.trackMouse.bind(this)
-    this.keyListener = new PersistentListener('keypress', (event) => {
-      if (event.key === '+') this.addCorner()
-      else if (event.key === '-') this.deleteCorner()
-    })
+    this.handleClick = this.handleClick.bind(this)
   }
 
-  addCorner () {
+  addCorner (mousePosition) {
     const points = this.state.points.slice()
-    const [a, b] = findClosestPoints(points, ...this.mousePosition)
+    const [a, b] = findClosestPoints(points, ...mousePosition)
     let i
     if (diff(a, b) === 2) i = a > b ? a : b
     else i = a < b ? a : b
-    points.splice(i, 0, ...this.mousePosition)
+    points.splice(i, 0, ...mousePosition)
     this.setState({points})
   }
 
-  deleteCorner () {
+  deleteCorner (mousePosition) {
     if (this.state.points.length < 7) return
     const points = this.state.points.slice()
-    const i = findClosestPoints(points, ...this.mousePosition)[0]
+    const i = findClosestPoints(points, ...mousePosition)[0]
     points.splice(i, 2)
     this.setState({points})
   }
@@ -75,10 +55,14 @@ export default class FlexPoly extends PureComponent {
     this.setState({x, y})
   }
 
-  trackMouse (event) {
+  handleClick (event) {
+    console.log(event)
+    if (!this.props.heldKeys.size) return
     const {x, y} = this.state
     const {evt} = event
-    this.mousePosition = [evt.layerX - x, evt.layerY - y]
+    const mousePosition = [evt.layerX - x, evt.layerY - y]
+    if (this.props.heldKeys.has('Control')) this.addCorner(mousePosition)
+    if (this.props.heldKeys.has('Alt')) this.deleteCorner(mousePosition)
   }
 
   resize (event) {
@@ -111,10 +95,8 @@ export default class FlexPoly extends PureComponent {
         <Line
           closed={true} points={points} fill={fill} shadowBlur={5}
           name={this.props.name}
-          onMouseEnter={this.keyListener.on}
-          onMouseLeave={this.keyListener.off}
-          onMouseMove={this.trackMouse}
           onMouseDown={this.props.onMouseDown}
+          onClick={this.handleClick}
         />
         {anchors}
       </Group>

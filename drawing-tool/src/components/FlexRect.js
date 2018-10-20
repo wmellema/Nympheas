@@ -12,8 +12,7 @@ export default class FlexRect extends Component {
       y: props.y,
       width: props.width,
       height: props.height,
-      fill: props.fill || Konva.Util.getRandomColor(),
-      rotation: 0
+      fill: props.fill || Konva.Util.getRandomColor()
     }
     this.reposition = this.reposition.bind(this)
     this.resize = this.resize.bind(this)
@@ -30,23 +29,23 @@ export default class FlexRect extends Component {
     const anchor = event.target.attrs
 
     switch (event.target.name()) {
-      case 'topLeft':
+      case 'tl':
         width -= anchor.x
         height -= anchor.y
         x += anchor.x
         y += anchor.y
         break
-      case 'topRight':
+      case 'tr':
         width = anchor.x
         height -= anchor.y
         y += anchor.y
         break
-      case 'bottomLeft':
+      case 'bl':
         width -= anchor.x
         height = anchor.y
         x += anchor.x
         break
-      case 'bottomRight':
+      case 'br':
         width = anchor.x
         height = anchor.y
         break
@@ -56,22 +55,20 @@ export default class FlexRect extends Component {
   }
 
   render () {
-    const {x, y, width, height, fill, rotation} = this.state
+    const {x, y, width, height, fill} = this.state
     const anchors = (!this.props.selected) ? null : (
       <Fragment>
-        <Anchor name="topLeft" x={0} y={0} onDragMove={this.resize} />
-        <Anchor name="topRight" x={width} y={0} onDragMove={this.resize} />
-        <Anchor name="bottomLeft" x={0} y={height} onDragMove={this.resize} />
-        <Anchor name="bottomRight" x={width} y={height} onDragMove={this.resize} />
+        <Anchor name="tl" x={0} y={0} onDragMove={this.resize} />
+        <Anchor name="tr" x={width} y={0} onDragMove={this.resize} />
+        <Anchor name="bl" x={0} y={height} onDragMove={this.resize} />
+        <Anchor name="br" x={width} y={height} onDragMove={this.resize} />
       </Fragment>
     )
 
     return (
       <Group
-        x={x} y={y} draggable={true} rotation={rotation}
+        x={x} y={y} draggable={true}
         onDragEnd={this.reposition}
-        // onMouseEnter={() => this.setRotate(true)}
-        // onMouseLeave={() => this.setRotate(false)}
       >
         <Rect
           width={width} height={height} fill={fill} shadowBlur={5}
