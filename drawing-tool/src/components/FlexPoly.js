@@ -31,6 +31,14 @@ export default class FlexPoly extends PureComponent {
     this.handleClick = this.handleClick.bind(this)
   }
 
+  componentDidMount () {
+    this.props.backgroundLayer.on('click', this.handleClick)
+  }
+
+  componentWillUnmount () {
+    this.props.backgroundLayer.off('click', this.handleClick)
+  }
+
   addCorner (mousePosition) {
     const points = this.state.points.slice()
     const [a, b] = findClosestPoints(points, ...mousePosition)
@@ -56,8 +64,7 @@ export default class FlexPoly extends PureComponent {
   }
 
   handleClick (event) {
-    console.log(event)
-    if (!this.props.heldKeys.size) return
+    if (!this.props.heldKeys.size || !this.props.selected) return
     const {x, y} = this.state
     const {evt} = event
     const mousePosition = [evt.layerX - x, evt.layerY - y]
@@ -85,6 +92,7 @@ export default class FlexPoly extends PureComponent {
             x={points[i]} y={points[i + 1]}
             key={i} name={`${i}`}
             onDragMove={this.resize}
+            onClick={this.handleClick}
           />
         )
       }
@@ -93,7 +101,7 @@ export default class FlexPoly extends PureComponent {
     return (
       <Group draggable={true} x={x} y={y} onDragEnd={this.reposition}>
         <Line
-          closed={true} points={points} fill={fill} shadowBlur={5}
+          closed={true} points={points} fill={fill} shadowBlur={5} opacity={0.5}
           name={this.props.name}
           onMouseDown={this.props.onMouseDown}
           onClick={this.handleClick}

@@ -4,6 +4,8 @@ import {Stage, Layer, Rect, Line} from 'react-konva'
 import FlexRect from './FlexRect'
 import FlexPoly from './FlexPoly'
 
+const background = 'http://prints.mikeschley.com/img/s/v-3/p568099269-4.jpg'
+
 let shapeId = 0
 
 const heldKeys = new Set()
@@ -12,6 +14,12 @@ window.addEventListener('keyup', (event) => heldKeys.delete(event.key))
 
 const DEFAULT_POINTS = [90, 24, 30, 8, 43, 51, 74, 38]
 const DEFAULT_POS = {x: 100, y: 100}
+
+function imgFrom (url) {
+  const img = new Image()
+  img.src = url
+  return img
+}
 
 export default class App extends Component {
   constructor (props) {
@@ -56,7 +64,11 @@ export default class App extends Component {
     })
   }
   deselectShape (event) {
-    if (event.target.nodeType !== 'Stage') return
+    if (heldKeys.size) return
+    const mousePoint = {x: event.evt.layerX, y: event.evt.layerY}
+    const intersect = !!this.shapesLayer.getIntersection(mousePoint)
+
+    if (intersect) return
     const {shapes, selectedShape} = this.state
     if (selectedShape) selectedShape.selected = false
     this.setState({
@@ -80,8 +92,8 @@ export default class App extends Component {
             key={v.id} name={v.id}
             {...DEFAULT_POS}
             width={50} height={50}
-            heldKeys={heldKeys}
             selected={v.selected}
+            heldKeys={heldKeys}
             onMouseDown={this.selectShape}
           />
         )
@@ -90,20 +102,28 @@ export default class App extends Component {
             key={v.id} name={v.id}
             {...DEFAULT_POS}
             points={[...DEFAULT_POINTS]}
-            heldKeys={heldKeys}
             selected={v.selected}
+            heldKeys={heldKeys}
+            backgroundLayer={this.backgroundLayer} // FlexPoly needs this ref to listen for clicks outside itself
             onMouseDown={this.selectShape}
           />
         )
         default: return null
       }
     })
+    const img = imgFrom(background)
     return (
       <Stage
-        width={window.innerWidth} height={window.innerHeight}
+        width={img.width} height={img.height}
         onClick={this.deselectShape}
       >
-        <Layer>
+        <Layer ref={(ref) => this.backgroundLayer = ref}>
+          <Rect
+            width={img.width} height={img.height}
+            fillPatternImage={img}
+          />
+        </Layer>
+        <Layer ref={(ref) => this.shapesLayer = ref}>
           <Rect
             x={10} y={10} width={50} height={50} fill="#EEEEEE" shadowBlur={5}
             onClick={() => this.createShape('FlexRect')}

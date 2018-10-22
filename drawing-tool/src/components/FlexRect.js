@@ -71,7 +71,7 @@ export default class FlexRect extends Component {
         onDragEnd={this.reposition}
       >
         <Rect
-          width={width} height={height} fill={fill} shadowBlur={5}
+          width={width} height={height} fill={fill} shadowBlur={5} opacity={0.5}
           name={this.props.name}
           onMouseDown={this.props.onMouseDown}
         />
