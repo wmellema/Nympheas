@@ -1,6 +1,7 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import {Stage, Layer, Rect, Line} from 'react-konva'
 
+import {openModal} from '../modals'
 import FlexRect from './FlexRect'
 import FlexPoly from './FlexPoly'
 
@@ -31,6 +32,16 @@ export default class App extends Component {
     this.selectShape = this.selectShape.bind(this)
     this.deselectShape = this.deselectShape.bind(this)
     this.keyListener = this.keyListener.bind(this)
+    this.openImportDialog = this.openImportDialog.bind(this)
+    this.openExportDialog = this.openExportDialog.bind(this)
+    this.shapeRefs = new Map()
+    // this.state.shapes holds minimal descriptions of shapes to be rendered.
+    // this.shapeRefs holds refs to the wrapper components, so their state can
+    // be read for the purpose of serialization.
+    // cycle:
+    // 1. update this.state.shapes
+    // 2. rerender
+    // 3. update this.shapeRefs
   }
   componentDidMount () {
     window.addEventListener('keypress', this.keyListener)
@@ -81,13 +92,44 @@ export default class App extends Component {
     if (!selectedShape) return
     shapes = [...shapes]
     shapes.splice(shapes.indexOf(selectedShape), 1)
+    this.shapeRefs.delete(selectedShape.id)
     selectedShape = null
     this.setState({shapes, selectedShape})
+  }
+  openImportDialog () {
+    openModal({
+      // title: 'Import',
+      type: 'input',
+      message: 'Paste your JSON:'
+    }).then(({result, data}) => {
+      console.log(result)
+      console.log(data)
+    })
+  }
+  openExportDialog () {
+    openModal({
+      // title: 'Export',
+      type: 'output',
+      message: 'Copy and save your JSON:',
+      output: this.serializeShapes()
+    })
+  }
+  serializeShapes () {
+    const arr = []
+    for (const s of this.state.shapes) {
+      const attrs = this.shapeRefs.get(s.id).state
+      arr.push({
+        id: s.id,
+        type: s.type,
+        attrs: Object.assign({}, attrs)
+      })
+    }
+    return JSON.stringify(arr)
   }
   render () {
     const shapes = this.state.shapes.map((v) => {
       switch (v.type) {
-        case 'FlexRect': return (
+        case 'Rect': return (
           <FlexRect
             key={v.id} name={v.id}
             {...DEFAULT_POS}
@@ -95,17 +137,20 @@ export default class App extends Component {
             selected={v.selected}
             heldKeys={heldKeys}
             onMouseDown={this.selectShape}
+            ref={(ref) => this.shapeRefs.set(v.id, ref)}
           />
         )
-        case 'FlexPoly': return (
+        case 'Poly': return (
           <FlexPoly
             key={v.id} name={v.id}
             {...DEFAULT_POS}
             points={[...DEFAULT_POINTS]}
             selected={v.selected}
             heldKeys={heldKeys}
-            backgroundLayer={this.backgroundLayer} // FlexPoly needs this ref to listen for clicks outside itself
+            backgroundLayer={this.backgroundLayer} // FlexPoly needs this ref
+            // to listen for clicks outside itself
             onMouseDown={this.selectShape}
+            ref={(ref) => this.shapeRefs.set(v.id, ref)}
           />
         )
         default: return null
@@ -113,29 +158,33 @@ export default class App extends Component {
     })
     const img = imgFrom(background)
     return (
-      <Stage
-        width={img.width} height={img.height}
-        onClick={this.deselectShape}
-      >
-        <Layer ref={(ref) => this.backgroundLayer = ref}>
-          <Rect
-            width={img.width} height={img.height}
-            fillPatternImage={img}
-          />
-        </Layer>
-        <Layer ref={(ref) => this.shapesLayer = ref}>
-          <Rect
-            x={10} y={10} width={50} height={50} fill="#EEEEEE" shadowBlur={5}
-            onClick={() => this.createShape('FlexRect')}
-          />
-          <Line
-            x={70} y={10} points={[...DEFAULT_POINTS]} fill="#EEEEEE"
-            closed={true} shadowBlur={5}
-            onClick={() => this.createShape('FlexPoly')}
-          />
-          {shapes}
-        </Layer>
-      </Stage>
+      <Fragment>
+        <button onClick={this.openImportDialog}>Import</button>
+        <button onClick={this.openExportDialog}>Export</button>
+        <Stage
+          width={img.width} height={img.height}
+          onClick={this.deselectShape}
+        >
+          <Layer ref={(ref) => this.backgroundLayer = ref}>
+            <Rect
+              width={img.width} height={img.height}
+              fillPatternImage={img}
+            />
+          </Layer>
+          <Layer ref={(ref) => this.shapesLayer = ref}>
+            <Rect
+              x={10} y={10} width={50} height={50} fill="#EEEEEE" shadowBlur={5}
+              onClick={() => this.createShape('Rect')}
+            />
+            <Line
+              x={70} y={10} points={[...DEFAULT_POINTS]} fill="#EEEEEE"
+              closed={true} shadowBlur={5}
+              onClick={() => this.createShape('Poly')}
+            />
+            {shapes}
+          </Layer>
+        </Stage>
+      </Fragment>
     )
   }
 }
