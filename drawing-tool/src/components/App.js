@@ -60,6 +60,7 @@ export default class App extends Component {
     shapes.push({
       type,
       id: `${shapeId++}`,
+      attrs: {},
       selected: false
     })
     this.setState({shapes})
@@ -75,11 +76,9 @@ export default class App extends Component {
     })
   }
   deselectShape (event) {
-    if (heldKeys.size) return
-    const mousePoint = {x: event.evt.layerX, y: event.evt.layerY}
-    const intersect = !!this.shapesLayer.getIntersection(mousePoint)
-
-    if (intersect) return
+    if (heldKeys.size || event.target.name() !== 'Background') return
+    // const mousePoint = {x: event.evt.layerX, y: event.evt.layerY}
+    // const intersect = !!this.shapesLayer.getIntersection(mousePoint)
     const {shapes, selectedShape} = this.state
     if (selectedShape) selectedShape.selected = false
     this.setState({
@@ -102,8 +101,7 @@ export default class App extends Component {
       type: 'input',
       message: 'Paste your JSON:'
     }).then(({result, data}) => {
-      console.log(result)
-      console.log(data)
+      if (result === 'ok') this.importShapes(data)
     })
   }
   openExportDialog () {
@@ -126,14 +124,39 @@ export default class App extends Component {
     }
     return JSON.stringify(arr)
   }
+  importShapes (unparsedData) {
+    let data
+    try {
+      data = JSON.parse(unparsedData)
+    } catch (err) {
+      alert('Your JSON is invalid!')
+    }
+    for (const s of this.state.shapes) {
+      this.shapeRefs.delete(s.id)
+    }
+    const shapes = []
+    for (const s of data) {
+      shapes.push({
+        type: s.type,
+        attrs: s.attrs,
+        id: `${shapeId++}`,
+        selected: false
+      })
+    }
+    this.setState({
+      shapes,
+      selectedShape: null
+    })
+  }
   render () {
     const shapes = this.state.shapes.map((v) => {
       switch (v.type) {
         case 'Rect': return (
           <FlexRect
             key={v.id} name={v.id}
-            {...DEFAULT_POS}
-            width={50} height={50}
+            x={v.attrs.x || DEFAULT_POS.x} y={v.attrs.y || DEFAULT_POS.y}
+            width={v.attrs.width || 50} height={v.attrs.height || 50}
+            fill={v.attrs.fill}
             selected={v.selected}
             heldKeys={heldKeys}
             onMouseDown={this.selectShape}
@@ -143,8 +166,9 @@ export default class App extends Component {
         case 'Poly': return (
           <FlexPoly
             key={v.id} name={v.id}
-            {...DEFAULT_POS}
-            points={[...DEFAULT_POINTS]}
+            x={v.attrs.x || DEFAULT_POS.x} y={v.attrs.y || DEFAULT_POS.y}
+            points={v.attrs.points || [...DEFAULT_POINTS]}
+            fill={v.attrs.fill}
             selected={v.selected}
             heldKeys={heldKeys}
             backgroundLayer={this.backgroundLayer} // FlexPoly needs this ref
@@ -167,6 +191,7 @@ export default class App extends Component {
         >
           <Layer ref={(ref) => this.backgroundLayer = ref}>
             <Rect
+              name="Background"
               width={img.width} height={img.height}
               fillPatternImage={img}
             />
