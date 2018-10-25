@@ -39,7 +39,7 @@ function openOutputModal (descriptor) {
     const box =  create(modal, 'div', {class: 'box'})
     create(box, 'h3', {class: 'title'}, descriptor.title || '')
     create(box, 'div', {class: 'message'}, descriptor.message || '')
-    create(box, 'div', {class: 'output'}, descriptor.output || '')
+    create(box, 'textarea', {class: 'output', disabled: true}, descriptor.output || '')
     const bg = create(box, 'div', {class: 'button-group'})
     create(bg, 'button', {}, descriptor.ok || 'OK')
       .addEventListener('click', () => {

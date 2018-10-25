@@ -117,7 +117,7 @@ export default class App extends Component {
     for (const s of this.state.shapes) {
       const attrs = this.shapeRefs.get(s.id).state
       arr.push({
-        id: s.id,
+        // id: s.id,
         type: s.type,
         attrs: Object.assign({}, attrs)
       })
@@ -126,14 +126,9 @@ export default class App extends Component {
   }
   importShapes (unparsedData) {
     let data
-    try {
-      data = JSON.parse(unparsedData)
-    } catch (err) {
-      alert('Your JSON is invalid!')
-    }
-    for (const s of this.state.shapes) {
-      this.shapeRefs.delete(s.id)
-    }
+    try { data = JSON.parse(unparsedData) }
+    catch (err) { alert('Your JSON is invalid!') }
+    for (const s of this.state.shapes) this.shapeRefs.delete(s.id)
     const shapes = []
     for (const s of data) {
       shapes.push({
@@ -170,10 +165,9 @@ export default class App extends Component {
             points={v.attrs.points || [...DEFAULT_POINTS]}
             fill={v.attrs.fill}
             selected={v.selected}
-            heldKeys={heldKeys}
-            backgroundLayer={this.backgroundLayer} // FlexPoly needs this ref
-            // to listen for clicks outside itself
-            onMouseDown={this.selectShape}
+            heldKeys={heldKeys}                    //    FlexPoly needs this ref
+            backgroundLayer={this.backgroundLayer} // <- to listen for clicks
+            onMouseDown={this.selectShape}         //    outside itself
             ref={(ref) => this.shapeRefs.set(v.id, ref)}
           />
         )
